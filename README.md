@@ -128,22 +128,64 @@ python quiz.py
 ![step4-2](./images/step4-2.png)
 ![step4-3](./images/step4-3.png)
 
-### ⬜ STEP 5: 퀴즈 풀기 기능 구현
+### ✅ STEP 5: 퀴즈 풀기 기능 구현
+## 📚 학습 내용
+
+| 개념 | 설명 |
+|------|------|
+| 리스트 인덱싱 | 번호로 리스트 항목 접근 |
+| 타입 변환 | 문자열 → 정수 변환 (int()) |
+| 조건문 | 정답 여부 판별 |
+| isdigit() | 입력값이 숫자인지 확인 |
+
+## 🔧 실습 내용
+
+- QuizGame 클래스에 play() 메서드 구현
+
+![step5-1](./images/step5-1.png)
+
+![step5-2](./images/step5-2.png)
+
+![step5-3](./images/step5-3.png)
+
+- 사용자 입력(숫자)을 선택지 텍스트로 변환 후 정답 비교
+
+![step5-4](./images/step5-4.png)
+
+![step5-5](./images/step5-5.png)
+
+- 최종 점수 출력 및 결과 메시지 표시
+
+![step5-6](./images/step5-6.png)
+
+- 최종 파일 구조 
+
+📦 프로젝트
+ ├── quiz.py   → Quiz 클래스 + quiz_data  (데이터/모델)
+ ├── game.py   → QuizGame 클래스          (게임 로직)
+ ├── main.py   → 메뉴 화면 + 실행         (진입점)
+ └── ...
+
+- 변경된 import 흐름
+
+main.py
+  └── from game import QuizGame
+        └── from quiz import Quiz, quiz_data
+
+
+### ✅ STEP 6: 퀴즈 추가 기능 구현
 (진행 예정)
 
-### ⬜ STEP 6: 퀴즈 추가 기능 구현
+### ✅ STEP 7: 퀴즈 목록 기능 구현
 (진행 예정)
 
-### ⬜ STEP 7: 퀴즈 목록 기능 구현
+### ✅ STEP 8: 점수 확인 기능 구현
 (진행 예정)
 
-### ⬜ STEP 8: 점수 확인 기능 구현
+### ✅ STEP 9: state.json 파일 저장/불러오기
 (진행 예정)
 
-### ⬜ STEP 9: state.json 파일 저장/불러오기
-(진행 예정)
-
-### ⬜ STEP 10: 브랜치 생성 및 병합
+### ✅ STEP 10: 브랜치 생성 및 병합
 (진행 예정)
 
 ### ⬜ STEP 11: README.md 최종 완성

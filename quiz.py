@@ -1,6 +1,6 @@
-# =====================
+# ====================
 # 퀴즈 데이터
-# =====================
+# ====================
 quiz_data = [
     {
         "question": "조선을 건국한 사람은 누구인가요?",
@@ -29,35 +29,11 @@ quiz_data = [
     }
 ]
 
-# =====================
+# ====================
 # Quiz 클래스 (문제 하나)
-# =====================
+# ====================
 class Quiz:
     def __init__(self, question, options, answer):
         self.question = question   # 문제
-        self.options = options     # 보기 4개 (리스트)
-        self.answer = answer       # 정답
-
-# =====================
-# QuizGame 클래스 (게임 전체)
-# =====================
-class QuizGame:
-    def __init__(self):
-        self.quizzes = []   # Quiz 객체들을 담는 리스트
-        self.score = 0      # 점수
-
-    def load_data(self):
-        """quiz_data를 Quiz 객체로 변환해서 저장"""
-        for item in quiz_data:
-            quiz = Quiz(item["question"], item["options"], item["answer"])
-            self.quizzes.append(quiz)
-
-# =====================
-# 실행 테스트
-# =====================
-if __name__ == "__main__":
-    game = QuizGame()
-    game.load_data()
-    print(f"퀴즈 {len(game.quizzes)}개 로드 완료!")
-    print(f"첫 번째 문제: {game.quizzes[0].question}")
-    
+        self.options  = options    # 보기 4개 (리스트)
+        self.answer   = answer     # 정답

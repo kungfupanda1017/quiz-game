@@ -32,12 +32,13 @@ python quiz.py
 
 📚 학습 내용
 
-개념	설명
-git init	로컬 저장소 초기화
-git clone	원격 저장소를 내 컴퓨터로 복사
-git add	변경 파일을 스테이징 영역에 추가
+개념	       설명
+
+git init	  로컬 저장소 초기화
+git clone	  원격 저장소를 내 컴퓨터로 복사
+git add	    변경 파일을 스테이징 영역에 추가
 git commit	변경 내용을 저장소에 기록
-git push	로컬 커밋을 원격(GitHub)에 업로드
+git push	  로컬 커밋을 원격(GitHub)에 업로드
 
 🛠️ 실습 내용
 

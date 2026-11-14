@@ -43,8 +43,8 @@ git push	로컬 커밋을 원격(GitHub)에 업로드
 - 로컬 폴더에 git clone 완료
 - README.md 초기 파일 생성
 - 첫 번째 커밋 및 push 완료
-![STEP1-1](images/step1-1.png)
-![STEP1-2](images/step1-2.png)
+![step1-1](images/step1-1.png)
+![step1-2](images/step1-2.png)
 
 ### ✅ STEP 2: 퀴즈 데이터 작성
 
@@ -60,8 +60,8 @@ JSON 형식	데이터를 저장하는 텍스트 형식
 - 객관식 4지선다 형식으로 구성
 - 정답 및 해설 포함
 - 커밋 및 push 완료
-![STEP2-1](images/step2-1.png)
-![STEP2-2](images/step2-1.png)
+![step2-1](images/step2-1.png)
+![step2-2](images/step2-2.png)
 
 ### ✅ STEP 3: Quiz / QuizGame 클래스 설계
 
@@ -76,8 +76,8 @@ self	클래스 자기 자신을 가리키는 변수
 - Quiz 클래스: 문제/선택지/정답/해설 속성 정의
 - QuizGame 클래스: 퀴즈 목록 관리 및 데이터 로드
 - 실행 결과 확인
-![STEP3-1](images/step3-1.png)
-![STEP3-2](images/step3-2.png)
+![step3-1](images/step3-1.png)
+![step3-2](images/step3-2.png)
 
 ### ⬜ STEP 4: 메뉴 화면 구현
 (진행 예정)

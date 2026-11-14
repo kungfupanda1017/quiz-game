@@ -43,7 +43,7 @@ git push	로컬 커밋을 원격(GitHub)에 업로드
 - 로컬 폴더에 git clone 완료
 - README.md 초기 파일 생성
 - 첫 번째 커밋 및 push 완료
-![step1-1](https://raw.githubusercontent.com/kungfupanda1017/quiz-game/main/images/step1-1.png)
+![step1-1](./images/step1-1.png)
 ![step1-2](https://raw.githubusercontent.com/kungfupanda1017/quiz-game/main/images/step1-2.png)
 
 ### ✅ STEP 2: 퀴즈 데이터 작성

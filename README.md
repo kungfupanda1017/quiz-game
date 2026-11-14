@@ -85,8 +85,31 @@ self	클래스 자기 자신을 가리키는 변수
 
 ![step3-2](https://raw.githubusercontent.com/kungfupanda1017/quiz-game/main/images/step3-2.png)
 
-### ⬜ STEP 4: 메뉴 화면 구현
-(진행 예정)
+### ✅ STEP 4: 메뉴 화면 구현
+
+📚 학습 내용
+
+#### 1. while 반복문을 활용한 메뉴 루프
+- `while True`로 프로그램이 계속 실행되도록 구현
+- `break`로 루프 종료 조건 설정
+
+#### 2. 조건문으로 메뉴 분기 처리
+- `if / elif / else`로 각 메뉴 번호에 맞는 기능 연결
+- 잘못된 입력값 처리 방법 학습
+
+#### 3. 예외 처리 (try / except)
+- 숫자가 아닌 값 입력 시 오류 없이 처리
+- `ValueError`를 활용한 안전한 입력 처리
+
+🛠️ 실습 내용
+
+#### 1. main.py 메뉴 화면 구현
+- 1~5번 메뉴 선택 기능 구현
+- 메뉴 선택에 따라 각 기능 호출
+
+![step4-1](./images/step4-1.png)
+![step4-2](./images/step4-2.png)
+![step4-3](./images/step4-3.png)
 
 ### ⬜ STEP 5: 퀴즈 풀기 기능 구현
 (진행 예정)

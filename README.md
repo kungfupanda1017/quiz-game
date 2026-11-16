@@ -269,7 +269,53 @@ quiz-game/
 └── quizzes.json   ← 자동 생성!
 
 ### ✅ STEP 10: 브랜치 생성 및 병합
-(진행 예정)
 
-### ⬜ STEP 11: README.md 최종 완성
-(진행 예정)
+📚 학습 내용
+1. 브랜치(Branch)란?
+브랜치는 기존 코드를 건드리지 않고 새로운 기능을 독립적으로 개발할 수 있는 Git의 핵심 기능입니다.
+
+main ──────────────────────────────▶ (안정적인 코드 유지)
+        │
+        └─── feature/high-score ──▶ (최고점수 기능 개발)
+💡 마치 책의 초안을 복사해서 수정하는 것처럼,
+원본은 그대로 두고 복사본에서 작업하는 방식입니다.
+
+2. 브랜치를 사용하는 이유
+상황	브랜치 없이	브랜치 사용
+새 기능 개발 중 오류 발생	기존 코드도 망가짐	main 코드는 안전
+여러 기능 동시 개발	코드 충돌 위험	각자 독립 작업 가능
+기능 개발 취소	되돌리기 어려움	브랜치만 삭제하면 끝
+
+3. 브랜치 주요 명령어
+- 브랜치 생성 git branch feature/high-score
+- 브랜치 이동 git checkout feature/high-score
+- 생성 + 이동 한번에 git checkout -b feature/high-score
+- 현재 브랜치 확인 git branch
+- main으로 돌아오기 git checkout main
+- 브랜치 합치기 (main에서 실행) git merge feature/high-score
+
+4. 브랜치 활용 예시
+main                    → 실제 서비스 중인 코드
+feature/login           → 로그인 기능 개발 중
+feature/dark-mode       → 다크모드 개발 중
+hotfix/bug-fix          → 긴급 버그 수정 중
+- 각 기능을 독립된 브랜치에서 개발하고 완성되면 main에 합치는 방식
+
+🛠️ 실습 내용
+
+1단계 : feature/high-score 브랜치 생성 및 이동
+2단계 : _load_high_score() 메서드 추가 (파일에서 불러오기)
+3단계 : _save_high_score() 메서드 추가 (파일에 저장하기)
+4단계 : __init__ 수정 (시작 시 자동으로 최고점수 불러오기)
+5단계 : play() 수정 (게임 후 최고점수 갱신 및 저장)
+6단계 : show_score() 수정 (최고기록 표시 강화)
+7단계 : 변경사항 커밋
+
+![step10-1](./images/step10-1.png)
+
+📁 생성되는 파일 구조
+quiz-game/
+├── main.py
+├── game.py
+├── quizzes.json       ← 퀴즈 목록 저장
+└── high_score.json    ← 최고 기록 저장 (자동 생성)

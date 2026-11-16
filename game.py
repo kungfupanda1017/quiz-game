@@ -1,160 +1,189 @@
 import json
-from quiz import Quiz, quiz_data
+from datetime import datetime
 
 class QuizGame:
     def __init__(self):
         self.quizzes = []
-        self.score   = 0
-
-    def load_data(self):
-        self.quizzes = []
-        for item in quiz_data:
-            quiz = Quiz(item["question"], item["options"], item["answer"])
-            self.quizzes.append(quiz)
-
-    def play(self):
-        self.load_data()
         self.score = 0
+        self.high_score = self._load_high_score()  # 파일에서 불러오기
 
-        print("\n📝 퀴즈를 시작합니다!")
-        print("─" * 35)
+    # ─────────────────────────────────────────
+    # 최고점수 파일 불러오기
+    # ─────────────────────────────────────────
+    def _load_high_score(self):
+        try:
+            with open("high_score.json", "r", encoding="utf-8") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {
+                "score": 0,
+                "total": 0,
+                "rate": 0.0,
+                "grade": "-",
+                "date": "-"
+            }
 
-        for i, quiz in enumerate(self.quizzes):
-            print(f"\n[{i+1}/{len(self.quizzes)}] {quiz.question}")
+    # ─────────────────────────────────────────
+    # 최고점수 파일 저장
+    # ─────────────────────────────────────────
+    def _save_high_score(self):
+        with open("high_score.json", "w", encoding="utf-8") as f:
+            json.dump(self.high_score, f, ensure_ascii=False, indent=4)
 
-            for j, option in enumerate(quiz.options):
-                print(f"  {j+1}. {option}")
+    # ─────────────────────────────────────────
+    # 등급 계산
+    # ─────────────────────────────────────────
+    def _get_grade(self, rate):
+        if rate == 100:
+            return "S"
+        elif rate >= 80:
+            return "A"
+        elif rate >= 60:
+            return "B"
+        else:
+            return "C"
 
-            answer = input("\n정답을 입력하세요: ").strip()
+    # ─────────────────────────────────────────
+    # 퀴즈 풀기
+    # ─────────────────────────────────────────
+    def play(self):
+        if not self.quizzes:
+            print("\n❌ 퀴즈가 없습니다. 먼저 퀴즈를 추가하거나 불러오세요.")
+            return
 
-            if answer.isdigit():
-                idx = int(answer) - 1
-                if 0 <= idx < len(quiz.options):
-                    selected = quiz.options[idx]
-                else:
-                    print("❌ 올바른 번호를 입력하세요!")
-                    continue
-            else:
-                selected = answer
+        self.score = 0
+        total = len(self.quizzes)
 
-            if selected == quiz.answer:
+        print("\n" + "=" * 40)
+        print("       🎮 퀴즈 게임 시작!")
+        print("=" * 40)
+
+        for i, quiz in enumerate(self.quizzes, 1):
+            print(f"\n[{i}/{total}] {quiz['question']}")
+            answer = input("정답 입력 → ").strip()
+
+            if answer == quiz["answer"]:
                 print("✅ 정답입니다!")
                 self.score += 1
             else:
-                print(f"❌ 오답! 정답은 '{quiz.answer}' 입니다.")
+                print(f"❌ 오답! 정답은 '{quiz['answer']}' 입니다.")
 
-            print("─" * 35)
+        # ── 결과 계산 ──
+        rate = (self.score / total) * 100
+        grade = self._get_grade(rate)
 
-        print(f"\n🏆 최종 점수: {self.score}/{len(self.quizzes)}")
+        print("\n" + "=" * 40)
+        print("           📊 최종 결과")
+        print("=" * 40)
+        print(f"  총 문제 수 : {total}문제")
+        print(f"  맞힌 문제  : {self.score}문제")
+        print(f"  정답률     : {rate:.1f}%")
+        print(f"  등급       : {grade}등급")
+        print("=" * 40)
 
-        if self.score == len(self.quizzes):
-            print("🎉 완벽합니다! 모두 맞혔어요!")
-        elif self.score >= len(self.quizzes) // 2:
-            print("👍 잘 하셨어요! 조금만 더 공부해봐요!")
+        # ── 최고점수 갱신 ──
+        if rate > self.high_score["rate"]:
+            self.high_score = {
+                "score": self.score,
+                "total": total,
+                "rate": rate,
+                "grade": grade,
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M")
+            }
+            self._save_high_score()  # 파일에 저장
+            print("\n🏆 새로운 최고점수 달성!")
+            print(f"   정답률 {rate:.1f}% ({grade}등급)")
         else:
-            print("💪 아쉽네요! 다시 도전해보세요!")
+            print(f"\n🏆 현재 최고점수 : {self.high_score['rate']:.1f}%")
+            print(f"   ({self.high_score['date']} 기록)")
 
+    # ─────────────────────────────────────────
+    # 퀴즈 추가
+    # ─────────────────────────────────────────
     def add_quiz(self):
-        print("\n📝 퀴즈 추가")
-        print("─" * 35)
+        print("\n" + "=" * 40)
+        print("        ➕ 퀴즈 추가")
+        print("=" * 40)
 
-        question = input("문제를 입력하세요: ").strip()
-        if not question:
-            print("❌ 문제를 입력해야 합니다!")
+        question = input("문제를 입력하세요 → ").strip()
+        answer = input("정답을 입력하세요 → ").strip()
+
+        if not question or not answer:
+            print("❌ 문제와 정답을 모두 입력해야 합니다.")
             return
 
-        options = []
-        for i in range(4):
-            option = input(f"선택지 {i+1}번 입력: ").strip()
-            if not option:
-                print("❌ 선택지를 입력해야 합니다!")
-                return
-            options.append(option)
-
-        print("\n선택지 목록:")
-        for i, opt in enumerate(options):
-            print(f"  {i+1}. {opt}")
-
-        answer_num = input("\n정답 번호를 입력하세요 (1~4): ").strip()
-
-        if not answer_num.isdigit() or not (1 <= int(answer_num) <= 4):
-            print("❌ 1~4 사이의 번호를 입력해야 합니다!")
-            return
-
-        answer = options[int(answer_num) - 1]
-
-        quiz_data.append({
+        self.quizzes.append({
             "question": question,
-            "options": options,
             "answer": answer
         })
+        print(f"✅ 퀴즈가 추가되었습니다! (현재 {len(self.quizzes)}개)")
 
-        print(f"\n✅ 퀴즈가 추가되었습니다!")
-        print(f"   문제: {question}")
-        print(f"   정답: {answer}")
-        print("─" * 35)
-
+    # ─────────────────────────────────────────
+    # 퀴즈 목록 보기
+    # ─────────────────────────────────────────
     def show_quiz_list(self):
-        print("\n📋 퀴즈 목록")
-        print("─" * 35)
+        print("\n" + "=" * 40)
+        print("        📋 퀴즈 목록")
+        print("=" * 40)
 
-        if not quiz_data:
-            print("❌ 등록된 퀴즈가 없습니다!")
+        if not self.quizzes:
+            print("  등록된 퀴즈가 없습니다.")
             return
 
-        for i, item in enumerate(quiz_data):
-            print(f"\n[{i+1}] {item['question']}")
-            for j, opt in enumerate(item['options']):
-                print(f"  {j+1}. {opt}")
-            print(f"  ✅ 정답: {item['answer']}")
-            print("─" * 35)
+        for i, quiz in enumerate(self.quizzes, 1):
+            print(f"  {i}. Q: {quiz['question']}")
+            print(f"     A: {quiz['answer']}")
+        print(f"\n  총 {len(self.quizzes)}개의 퀴즈")
 
-        print(f"\n총 {len(quiz_data)}개의 퀴즈가 있습니다!")
+    # ─────────────────────────────────────────
+    # 점수 확인
+    # ─────────────────────────────────────────
+    def show_score(self):
+        print("\n" + "=" * 40)
+        print("        🏆 점수 확인")
+        print("=" * 40)
 
+        # 현재 점수
+        if self.score == 0 and len(self.quizzes) == 0:
+            print("  아직 플레이 기록이 없습니다.")
+        else:
+            total = len(self.quizzes)
+            if total > 0 and self.score > 0:
+                rate = (self.score / total) * 100
+                grade = self._get_grade(rate)
+                print("  [ 이번 플레이 ]")
+                print(f"  맞힌 문제  : {self.score} / {total}")
+                print(f"  정답률     : {rate:.1f}%")
+                print(f"  등급       : {grade}등급")
+            else:
+                print("  아직 플레이 기록이 없습니다.")
+
+        # 최고점수
+        print("\n  [ 🥇 최고 기록 ]")
+        if self.high_score["date"] == "-":
+            print("  아직 최고 기록이 없습니다.")
+        else:
+            print(f"  정답률  : {self.high_score['rate']:.1f}%")
+            print(f"  맞힌 수 : {self.high_score['score']} / {self.high_score['total']}")
+            print(f"  등급    : {self.high_score['grade']}등급")
+            print(f"  날짜    : {self.high_score['date']}")
+        print("=" * 40)
+
+    # ─────────────────────────────────────────
+    # 퀴즈 저장
+    # ─────────────────────────────────────────
     def save_quiz(self):
         with open("quizzes.json", "w", encoding="utf-8") as f:
-            json.dump(quiz_data, f, ensure_ascii=False, indent=4)
-        print("\n✅ 퀴즈가 저장되었습니다! (quizzes.json)")
+            json.dump(self.quizzes, f, ensure_ascii=False, indent=4)
+        print(f"\n✅ {len(self.quizzes)}개의 퀴즈가 저장되었습니다. (quizzes.json)")
 
-    def show_score(self):
-        print("\n🏆 점수 확인")
-        print("─" * 35)
-
-        # 퀴즈를 한 번도 안 풀었을 때
-        if self.score == 0 and len(self.quizzes) == 0:
-            print("❌ 아직 퀴즈를 풀지 않았어요!")
-            print("   먼저 퀴즈를 풀어보세요! 💪")
-            print("─" * 35)
-            return
-
-        total = len(self.quizzes)   # 총 문제 수
-        score = self.score          # 맞힌 개수
-
-        # 정답률 계산
-        rate = (score / total) * 100
-
-        # 등급 계산
-        if rate == 100:
-            grade = "S 🌟"
-        elif rate >= 80:
-            grade = "A 😊"
-        elif rate >= 60:
-            grade = "B 👍"
-        else:
-            grade = "C 💪"
-
-        # 출력
-        print(f"  📊 점수    : {score} / {total}")
-        print(f"  📈 정답률  : {rate:.1f}%")
-        print(f"  🎖️  등급    : {grade}")
-        print("─" * 35)
-
+    # ─────────────────────────────────────────
+    # 퀴즈 불러오기
+    # ─────────────────────────────────────────
     def load_quiz(self):
         try:
             with open("quizzes.json", "r", encoding="utf-8") as f:
-                loaded = json.load(f)
-            quiz_data.clear()
-            quiz_data.extend(loaded)
-            print(f"\n✅ {len(quiz_data)}개의 퀴즈를 불러왔습니다!")
+                self.quizzes = json.load(f)
+            print(f"\n✅ {len(self.quizzes)}개의 퀴즈를 불러왔습니다.")
         except FileNotFoundError:
-            print("\n❌ 저장된 파일이 없습니다!")
+            print("\n❌ 저장된 퀴즈 파일이 없습니다. (quizzes.json)")

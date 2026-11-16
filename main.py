@@ -13,6 +13,7 @@ def show_menu():
 
 def main():
     game = QuizGame()
+    game.load_quiz()          # ← 프로그램 시작 시 자동 불러오기
 
     while True:
         show_menu()
@@ -22,16 +23,18 @@ def main():
             game.play()
 
         elif choice == "2":
-            print("퀴즈 추가 (준비중)")
+            game.add_quiz()
+            game.save_quiz()  # ← 퀴즈 추가 후 자동 저장
 
         elif choice == "3":
-            print("퀴즈 목록 (준비중)")
+            game.show_quiz_list()
 
         elif choice == "4":
-            print("점수 확인 (준비중)")
-
+            game.show_score()
+     
         elif choice == "5":
-            print("게임을 종료합니다. 👋")
+            game.save_quiz()  # ← 종료 전 자동 저장
+            print("\n퀴즈를 저장하고 종료합니다. 👋")
             break
 
         else:

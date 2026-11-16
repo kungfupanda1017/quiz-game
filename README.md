@@ -158,21 +158,6 @@ python quiz.py
 
 ![step5-6](./images/step5-6.png)
 
-- 최종 파일 구조 
-
-📦 프로젝트
- ├── quiz.py   → Quiz 클래스 + quiz_data  (데이터/모델)
- ├── game.py   → QuizGame 클래스          (게임 로직)
- ├── main.py   → 메뉴 화면 + 실행         (진입점)
- └── ...
-
-- 변경된 import 흐름
-
-main.py
-  └── from game import QuizGame
-        └── from quiz import Quiz, quiz_data
-
-
 ### ✅ STEP 6: 퀴즈 추가 기능 구현
 
 📚 학습 내용
@@ -186,20 +171,20 @@ main.py
 
 🔧 실습 내용
 - QuizGame 클래스에 add_quiz() 메서드 구현
+
 ![step6-1](./images/step6-1.png)
 
 - main.py 2번 메뉴에 add_quiz() 연결
+
 ![step6-2](./images/step6-1.png)
 
 - 퀴즈 추가 실행 화면 (문제/정답 입력 → 추가 완료 메시지)
+
 ![step6-3](./images/step6-3.png)
 
 - 추가된 퀴즈가 퀴즈 목록에 반영된 것 확인
-![step6-4](./images/step6-4.png)
 
-⚠️ 한계점
-현재는 프로그램 종료 시 추가한 퀴즈가 사라짐
-→ STEP 9에서 파일 저장 기능으로 해결 예정
+![step6-4](./images/step6-4.png)
 
 ### ✅ STEP 7: 퀴즈 목록 기능 구현
 
@@ -214,12 +199,15 @@ main.py
 
 🔧 실습 내용
 - QuizGame 클래스에 show_quiz_list() 메서드 구현
+
 ![step7-1](./images/step7-1.png)
 
 - main.py 3번 메뉴에 show_quiz_list() 연결
+
 ![step7-2](./images/step7-2.png)
 
 - 퀴즈 목록 실행 화면 (번호/문제/정답 출력)
+
 ![step7-3](./images/step7-3.png)
 
 ### ✅ STEP 8: 점수 확인 기능 구현
@@ -261,30 +249,11 @@ main.py
 - 프로그램 시작 시 quizzes.json 자동 불러오기
 - 파일이 없을 때 예외 처리 (FileNotFoundError)
 
-📁 생성되는 파일
-quiz-game/
-├── main.py
-├── game.py
-├── quiz.py
-└── quizzes.json   ← 자동 생성!
-
 ### ✅ STEP 10: 브랜치 생성 및 병합
 
 📚 학습 내용
 1. 브랜치(Branch)란?
-브랜치는 기존 코드를 건드리지 않고 새로운 기능을 독립적으로 개발할 수 있는 Git의 핵심 기능입니다.
-
-main ──────────────────────────────▶ (안정적인 코드 유지)
-        │
-        └─── feature/high-score ──▶ (최고점수 기능 개발)
-💡 마치 책의 초안을 복사해서 수정하는 것처럼,
-원본은 그대로 두고 복사본에서 작업하는 방식입니다.
-
-2. 브랜치를 사용하는 이유
-상황	브랜치 없이	브랜치 사용
-새 기능 개발 중 오류 발생	기존 코드도 망가짐	main 코드는 안전
-여러 기능 동시 개발	코드 충돌 위험	각자 독립 작업 가능
-기능 개발 취소	되돌리기 어려움	브랜치만 삭제하면 끝
+브랜치는 기존 코드를 건드리지 않고 새로운 기능을 독립적으로 개발할 수 있는 Git의 핵심 기능
 
 3. 브랜치 주요 명령어
 - 브랜치 생성 git branch feature/high-score
@@ -312,10 +281,3 @@ hotfix/bug-fix          → 긴급 버그 수정 중
 7단계 : 변경사항 커밋
 
 ![step10-1](./images/step10-1.png)
-
-📁 생성되는 파일 구조
-quiz-game/
-├── main.py
-├── game.py
-├── quizzes.json       ← 퀴즈 목록 저장
-└── high_score.json    ← 최고 기록 저장 (자동 생성)

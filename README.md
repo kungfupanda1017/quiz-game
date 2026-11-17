@@ -9,7 +9,7 @@ Python으로 만든 한국사 + 세계사 객관식 퀴즈게임
 
 ## ▶️ 실행 방법
 ```bash
-python quiz.py
+python3 main.py
 ```
 ## 🎮 기능 목록
 - [ ] 퀴즈 풀기
@@ -19,7 +19,7 @@ python quiz.py
 - [ ] 종료
 
 ## 📁 파일 구조
-(나중에 작성)
+quiz.py / game.py / main.py / state.json / README.md / images/ 
 
 ## 🗂️ 데이터 파일 설명
 (나중에 작성)

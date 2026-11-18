@@ -379,5 +379,7 @@ hotfix/bug-fix          → 긴급 버그 수정 중
 `git log --oneline --graph` 실행 결과 (의미 있는 커밋 10개 이상 + 병합 기록):
 
 ![step11](./images/step11.png)
+
 ![step12](./images/step12.png)
+
 *(⚠️ link removed: this download link couldn't be verified — ask me to re-send this file)*

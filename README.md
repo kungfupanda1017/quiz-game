@@ -56,10 +56,10 @@ quiz-game/
 
 ## 🔐 파일 복구 절차
 - state.json 이 손상되면 프로그램이 자동으로 state.json.broken 으로 보존한 뒤
-  기본 퀴즈 데이터로 복구하고 정상 파일을 다시 기록합니다.
-- 직전 정상 저장본은 state.json.bak 에 있습니다. 복구하려면:
+  기본 퀴즈 데이터로 복구하고 정상 파일을 다시 기록
+- 직전 정상 저장본은 state.json.bak 에 있고 복구하려면:
   cp state.json.bak state.json
-- 읽기/쓰기 권한 오류(PermissionError) 시 안내 메시지를 출력하고 저장을 중단합니다.
+- 읽기/쓰기 권한 오류(PermissionError) 시 안내 메시지를 출력하고 저장을 중단함
 
 ## 📝 커밋 컨벤션
 | 접두어 | 용도 |
@@ -70,7 +70,38 @@ quiz-game/
 | Docs: | README 등 문서 수정 |
 | Chore: | 빌드/설정 등 기타 작업 |
 
-커밋은 기능 단위로 작게 나눠 기록합니다.
+커밋은 기능 단위로 작게 나눠 기록함
+
+## ♻️ 클래스 재사용성
+Quiz 클래스는 화면(콘솔)과 분리된 순수 데이터 모델이라 같은 코드를 다른 곳에서 그대로 사용 가능
+
+- **다른 게임에서 재사용**: `from quiz import Quiz, DEFAULT_QUIZZES` 한 줄로
+  과거->미래 퀴즈 등 새 주제 게임을 만들 때 Quiz 클래스와 state.json 저장 방식을 그대로 이용함
+- **테스트 재사용**: `Quiz("2+2는?", ["3","4","5","6"], 2)` 처럼 객체를 만들어
+  `is_correct(2)` 가 True 인지 확인하는 자동 테스트를 별도 실행 없이 작성할 수 있음
+- **GUI 로 교체 시**: QuizGame 클래스는 print/input 에만 의존하지 않아,
+  나중에 Pygame 등으로 화면을 바꿔도 game.py 의 로직과 state.json 형식은 그대로 유지함
+
+## 🔧 요구 변경 시 영향 범위
+| 요구 변경 내용 | 수정해야 할 파일 | 수정 대상 클래스/메서드 |
+|---|---|---|
+| 점수 계산·등급 기준 변경 | game.py | QuizGame._get_grade() , QuizGame.play() |
+| 퀴즈 모델 변경(예: 해설·난이도 추가) | quiz.py | Quiz 클래스(__init__ , to_dict , from_dict) |
+| 데이터 저장 형식/경로 변경 | game.py | QuizGame._save_state() , QuizGame._load_state() |
+| 입력 규칙 변경(예: 정답 5지선다) | game.py | QuizGame._input_number() , QuizGame.add_quiz() |
+| 메뉴 항목 추가/변경 | main.py | main() 의 메뉴 출력과 분기문 |
+| 종료 시 동작 변경 | main.py | main() 의 except KeyboardInterrupt / EOFError 블록 |
+
+예시: "등급에 + 등급(D) 추가" 요구가 오면 game.py 의 _get_grade() 한 곳만 고치면 되고,
+"퀴즈에 해설 필드 추가"는 quiz.py 의 Quiz 클래스와 to_dict/from_dict 만 고치면
+state.json 의 기존 데이터는 from_dict 의 기본값 처리로 호환
+
+## 🧾 Git 원격 저장소 정보
+- 원격 URL: https://github.com/kungfu*********/quiz-game.git
+- 예시 커밋 메시지 (컨벤션 실제 적용 사례):
+  - `Feat: play() 정답 입력 숫자 검증(빈입력/비숫자/범위밖 재입력) 구현`
+  - `Fix: Ctrl+C/EOF 발생 시 저장 후 안전 종료 처리 추가`
+  - `Docs: README에 데이터 스키마·복구 절차·커밋 규칙 추가`
 
 ## 🚀 확장 시나리오 (대량 데이터 대응)
 퀴즈가 1,000개 이상으로 늘어날 경우를 대비한 개선 방향:
@@ -346,3 +377,4 @@ hotfix/bug-fix          → 긴급 버그 수정 중
 `git log --oneline --graph` 실행 결과 (의미 있는 커밋 10개 이상 + 병합 기록):
 
 ![step11](./images/step11.png)
+*(⚠️ link removed: this download link couldn't be verified — ask me to re-send this file)*

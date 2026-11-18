@@ -1,4 +1,5 @@
 # quiz-game
+
 # 🏛️ 역사 퀴즈 게임
 
 ## 📌 프로젝트 개요
@@ -18,13 +19,64 @@ python3 main.py
 - [ ] 점수 확인
 - [ ] 종료
 
+### v2 개선사항 (입력검증·안전종료)
+| 기능 | 설명 |
+|------|------|
+| 정답 입력 검증 | 정답을 1~4 번호로 입력, 빈 입력/비숫자/범위 밖은 재입력 안내 |
+| 퀴즈 추가 시 자동 저장 | 추가 즉시 state.json에 기록 (강제 종료돼도 데이터 유지) |
+| 안전 종료 | Ctrl+C(KeyboardInterrupt)/입력 종료(EOFError) 시 저장 후 종료 |
+| 파일 손상 복구 | state.json 손상 시 .broken 으로 보존 후 기본 데이터로 자동 복구 |
+
 ## 📁 파일 구조
-quiz.py / game.py / main.py / state.json / README.md / images/ 
+quiz-game/
+├── main.py          # 진입점: 메뉴 루프, 안전 종료 처리
+├── game.py          # QuizGame 클래스: 게임 진행·입력검증·저장/복구
+├── quiz.py          # Quiz 클래스 + 기본 퀴즈 데이터 5문제
+├── state.json       # 저장 데이터 (퀴즈 + 최고점수)
+├── state.json.bak   # 직전 저장본 백업 (자동 생성)
+├── quizzes.json     # (구버전) 첫 실행 시 state.json 으로 자동 이전됨
+├── images/          # 실습 스크린샷
+└── README.md
 
-## 🗂️ 데이터 파일 설명
-(나중에 작성)
+## 🗂️  데이터 파일 설명
 
----
+데이터는 프로젝트 루트의 **state.json** 에 UTF-8 인코딩으로 저장됩니다.
+
+| 필드 | 설명 |
+|------|------|
+| quizzes | 퀴즈 목록 (배열) |
+| quizzes[].question | 문제 (문자열) |
+| quizzes[].choices | 선택지 4개 (문자열 배열) |
+| quizzes[].answer | 정답 번호 1~4 (정수) |
+| best_score.score | 최고 기록의 맞힌 수 |
+| best_score.total | 최고 기록 당 총 문제 수 |
+
+저장 시점: 프로그램 시작 시 자동 로드 / 퀴즈 추가 즉시 자동 저장 /
+플레이 결과 확정 시 자동 저장 / 메뉴 5번 수동 저장 / 종료 시 자동 저장
+
+## 🔐 파일 복구 절차
+- state.json 이 손상되면 프로그램이 자동으로 state.json.broken 으로 보존한 뒤
+  기본 퀴즈 데이터로 복구하고 정상 파일을 다시 기록합니다.
+- 직전 정상 저장본은 state.json.bak 에 있습니다. 복구하려면:
+  cp state.json.bak state.json
+- 읽기/쓰기 권한 오류(PermissionError) 시 안내 메시지를 출력하고 저장을 중단합니다.
+
+## 📝 커밋 컨벤션
+| 접두어 | 용도 |
+|--------|------|
+| Feat: | 새로운 기능 추가 |
+| Fix: | 버그 수정 |
+| Refactor: | 동작 변경 없는 코드 정비 |
+| Docs: | README 등 문서 수정 |
+| Chore: | 빌드/설정 등 기타 작업 |
+
+커밋은 기능 단위로 작게 나눠 기록합니다.
+
+## 🚀 확장 시나리오 (대량 데이터 대응)
+퀴즈가 1,000개 이상으로 늘어날 경우를 대비한 개선 방향:
+- 저장: JSON 파일 대신 SQLite 로 전환해 인덱싱·부분 조회 지원
+- 출제: 출제 시 필요한 문제만 제너레이터로 순차 로딩해 메모리 사용 최소화
+- 검색: 문제 텍스트에 인덱스를 걸어 목록/검색 기능을 빠르게 유지
 
 ## 🛠️ 개발 학습 및 실습 기록
 
@@ -68,7 +120,7 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 - 객관식 4지선다 형식으로 구성
 - 정답 및 해설 포함
 - 커밋 및 push 완료
-  
+ 
 ![step2-1](https://raw.githubusercontent.com/kungfupanda1017/quiz-game/main/images/step2-1.png)
 
 ![step2-2](https://raw.githubusercontent.com/kungfupanda1017/quiz-game/main/images/step2-2.png)
@@ -170,6 +222,7 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 | 딕셔너리 | 문제와 정답을 묶어서 저장 |
 
 🔧 실습 내용
+
 - QuizGame 클래스에 add_quiz() 메서드 구현
 
 ![step6-1](./images/step6-1.png)
@@ -198,6 +251,7 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 | 딕셔너리 | 문제와 정답을 묶어서 저장 |
 
 🔧 실습 내용
+
 - QuizGame 클래스에 show_quiz_list() 메서드 구현
 
 ![step7-1](./images/step7-1.png)
@@ -213,18 +267,21 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 ### ✅ STEP 8: 점수 확인 기능 구현
 
 📚 학습 내용
+
 - self.score 로 인스턴스 변수 활용
 - 나눗셈으로 정답률 계산 (/)
 - f-string 으로 소수점 출력 (:.1f)
 - if / elif / else 로 등급 분기 처리
 
 🔧 실습 내용
+
 - 퀴즈를 풀지 않았을 때 안내 메시지 출력
 - 맞힌 개수 / 전체 문제 수 표시
 - 정답률(%) 계산 및 출력
 - 등급 계산 (S / A / B / C)
 
 ### 🎖️ 등급 기준
+
 | 등급 | 정답률 |
 |------|--------|
 | S 🌟 | 100%   |
@@ -237,6 +294,7 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 ### ✅ STEP 9: state.json 파일 저장/불러오기
 
 📚 학습 내용
+
 - import json 으로 JSON 모듈 사용
 - json.dump() 로 파일에 저장
 - json.load() 로 파일에서 불러오기
@@ -245,6 +303,7 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 - ensure_ascii=False 로 한글 깨짐 방지
 
 🔧 실습 내용
+
 - 퀴즈 추가 시 quizzes.json 에 자동 저장
 - 프로그램 시작 시 quizzes.json 자동 불러오기
 - 파일이 없을 때 예외 처리 (FileNotFoundError)
@@ -252,10 +311,11 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 ### ✅ STEP 10: 브랜치 생성 및 병합
 
 📚 학습 내용
-1. 브랜치(Branch)란?
+
+#### 1. 브랜치(Branch)란?
 브랜치는 기존 코드를 건드리지 않고 새로운 기능을 독립적으로 개발할 수 있는 Git의 핵심 기능
 
-3. 브랜치 주요 명령어
+#### 2. 브랜치 주요 명령어
 - 브랜치 생성 git branch feature/high-score
 - 브랜치 이동 git checkout feature/high-score
 - 생성 + 이동 한번에 git checkout -b feature/high-score
@@ -263,7 +323,7 @@ quiz.py / game.py / main.py / state.json / README.md / images/
 - main으로 돌아오기 git checkout main
 - 브랜치 합치기 (main에서 실행) git merge feature/high-score
 
-4. 브랜치 활용 예시
+#### 4. 브랜치 활용 예시
 main                    → 실제 서비스 중인 코드
 feature/login           → 로그인 기능 개발 중
 feature/dark-mode       → 다크모드 개발 중
@@ -281,3 +341,8 @@ hotfix/bug-fix          → 긴급 버그 수정 중
 - 7단계 : 변경사항 커밋
 
 ![step10-1](./images/step10-1.png)
+
+## 📸 Git 히스토리 증빙
+`git log --oneline --graph` 실행 결과 (의미 있는 커밋 10개 이상 + 병합 기록):
+
+![step11](./images/step11.png)
